@@ -14,6 +14,8 @@ namespace TestGame
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+        Texture2D testTexture;
+        Vector2 position = new Vector2(100, 100);
 
 		public Game1 ()
 		{
@@ -43,7 +45,8 @@ namespace TestGame
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch (GraphicsDevice);
 
-			//TODO: use this.Content to load your game content here 
+            //TODO: use this.Content to load your game content here
+            testTexture = Content.Load<Texture2D>("Asteroid.png");
 		}
 
 		/// <summary>
@@ -58,11 +61,20 @@ namespace TestGame
 			#if !__IOS__ &&  !__TVOS__
 			if (GamePad.GetState (PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState ().IsKeyDown (Keys.Escape))
 				Exit ();
-			#endif
-            
-			// TODO: Add your update logic here
-            
-			base.Update (gameTime);
+            #endif
+
+            KeyboardState keyboard = Keyboard.GetState();
+            if (keyboard.IsKeyDown(Keys.Left))
+                position += new Vector2(-1, 0);
+            if (keyboard.IsKeyDown(Keys.Right))
+                position += new Vector2(1, 0);
+            if (keyboard.IsKeyDown(Keys.Up))
+                position += new Vector2(0, -1);
+            if (keyboard.IsKeyDown(Keys.Down))
+                position += new Vector2(0, 1);
+
+
+            base.Update (gameTime);
 		}
 
 		/// <summary>
@@ -72,8 +84,11 @@ namespace TestGame
 		protected override void Draw (GameTime gameTime)
 		{
 			graphics.GraphicsDevice.Clear (Color.CornflowerBlue);
-            
-			//TODO: Add your drawing code here
+
+            //TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(testTexture, position, Color.White);
+            spriteBatch.End();
             
 			base.Draw (gameTime);
 		}
